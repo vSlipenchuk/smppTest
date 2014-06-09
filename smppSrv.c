@@ -182,6 +182,7 @@ if (dcs==0) {
    } else {
     len = dlen = win2gsm(buf,data,strlen(data)); //unsigned char *d, unsigned char *s, int len) {
     }
+printf("sending %d bytes dcs=%d\n",len,dcs);
 //sock->sendMode = 2; // OVER!!!
 switch(sock->sendMode) {
 case 1: len = smppPackSubmit(&msg->cmd,msg->num,sock->sysID,from,to,esmStoreAndForward,
@@ -325,7 +326,7 @@ case smpp_data_sm_resp: // response on a data sm???
        }
    break;
 case smpp_generic_nack:
-   CLOG(sock,2,"-!! Nack here, ignore,num:%d",cmd->num);
+   CLOG(sock,2,"-!! Nack here, ignore,num:%d, status=%x",cmd->num,cmd->id);
    break;
 default:
    DLOG(sock,2,&cmd,cmd->dlen,"-smpp UNKNOWN CMD_ID=%x",cmd->id); // send generic nack???
@@ -427,7 +428,7 @@ if (memcmp(buf,"sms",3)==0) { // Do It
             printf("-syntax> 'sms <phone> [text]'\n");
             return 0;
             }
-        dos2win(sms,sms,-1);
+        //dos2win(sms,sms,-1);
         int n  = 0;
         n = (int)smppSocketSendText(sock,"",phone,sms,onSmppConsoleMessageStatus);
         //printf("SEND TO '%s' TEXT '%s'\n",phone,sms);

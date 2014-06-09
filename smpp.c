@@ -179,6 +179,7 @@ ok = smppPackString(cmd,service_type,6) // Max 15 + NULL
   && smppPackString(cmd,"",0) // ShedTime
   && smppPackString(cmd,"",0) // VP
   && smppPackByte(cmd,registered_delivery) // delivery reports???
+  && smppPackByte(cmd,1) // replaceIfpresent !!!
   && smppPackByte(cmd,data_coding)
   && smppPackByte(cmd,0) // Def message ID
   && smppPackByte(cmd,len) // DataLength
@@ -321,7 +322,7 @@ ok = smppPopString(cmd,&pos,&cmd->service_type)
      && smppPopString(cmd,&pos,&cmd->shed_time)
      && smppPopString(cmd,&pos,&cmd->vp)
      && smppPopByte(cmd,&pos,&cmd->registred_delivery)
-     //&& smppPopByte(cmd,&pos,&cmd->replace_if_present)
+     && smppPopByte(cmd,&pos,&cmd->replace_if_present)
      && smppPopByte(cmd,&pos,&cmd->data_coding)
      && smppPopByte(cmd,&pos,&cmd->sm_default_msg_id)
      && smppPopByte(cmd,&pos,&cmd->sm_length);

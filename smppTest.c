@@ -62,7 +62,7 @@ sm->sock.pool = &TMP_POOL;
 sm->onNewMessage = onNewMessage;
 CLOG(sm,1,"...smppClient: connecting <%s> onMessage=%p",host,onNewMessage);
 //printf("BeginConnect\n");
-
+sm->sendMode=1; // submit
 smppClientConnect(sm,host); // Try Connect -)))
 //printf("Resulted connect\n");
 //CLOG(sm,1,"...2smppClient: connecting <%s>",host);
@@ -74,6 +74,7 @@ if (sock->connectStatus!=connectApp) {
 printf("DoneConnect...\n");
 printf("+smppClient connected '%s'. Type a command for:\n"
        " send message: 'sms <phone> text'\n"
+       " set send_sm command (submit|delivr|data_sm): 'm<1|2|3>'"
        " exit program: 'exit'\n",host);
 sock->readPacket = &TestReadCounter;
 //printf("!!! -- !!! OK - auth done - can do everything???\n");
