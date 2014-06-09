@@ -1,0 +1,2 @@
+[2014-06-09T17:37:02] (gear)    ...try connect gear 'vovka/skalwo@srv:82/cls/call?cls=sms&fun=onSmppMessage'
+[2014-06-09T17:39:28] (gear)    ...try connect gear 'user/password@srv:82/cls/call?cls=sms&fun=onSmppMessage'

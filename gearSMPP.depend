@@ -1,0 +1,321 @@
+# depslib dependency file v1.0
+1402320624 source:/mnt/c/prj/smppTest/common.c
+	"vs0.c"
+	"vss.c"
+	"sock.c"
+	"coders.c"
+	"vdb.c"
+	"vos.c"
+	"vdb2.c"
+	"logger.c"
+	"exe.c"
+	"httpSrv.c"
+	"httpTest.c"
+	"std_sock.c"
+	"ini.c"
+	"vos_linux_kbhit.c"
+
+1402308843 /prj/vos/vs0.c
+	<fcntl.h>
+	"vs0.h"
+	"vos.h"
+	<fcntl.h>
+
+1400828435 /prj/vos/vs0.h
+	"vtypes.h"
+	"vss.h"
+
+1400828470 /prj/vos/vtypes.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1400828435 /prj/vos/vss.h
+	"vtypes.h"
+
+1402309605 /prj/vos/vos.h
+	"vtypes.h"
+	<fcntl.h>
+	<netdb.h>
+	<sys/stat.h>
+	<sys/socket.h>
+	<windows.h>
+	<unistd.h>
+
+1402309279 /prj/vos/vss.c
+	"vss.h"
+	"vos.h"
+
+1402308989 /prj/vos/sock.c
+	"sock.h"
+	<stdarg.h>
+
+1400828435 /prj/vos/sock.h
+	"vos.h"
+	"vs0.h"
+	"vss.h"
+	"logger.h"
+	"vtypes.h"
+
+1400828435 /prj/vos/logger.h
+	"vs0.h"
+	<stdio.h>
+	<time.h>
+	"coders.h"
+
+1400828435 /prj/vos/coders.h
+	"vtypes.h"
+
+1400828435 /prj/vos/coders.c
+	"coders.h"
+	<stdarg.h>
+
+1402310288 /prj/vos/vos.c
+	"vos.h"
+	"pthread.h"
+	"stdlib.h"
+	"unistd.h"
+	<sys/time.h>
+	<stdio.h>
+	<sys/resource.h>
+
+1400828435 /prj/vos/logger.c
+	"logger.h"
+	<time.h>
+	<stdarg.h>
+	"vos.h"
+
+1400828435 /prj/vos/exe.c
+	"vtypes.h"
+	"coders.h"
+	"vos.h"
+
+1402309579 /prj/vos/httpSrv.c
+	"httpSrv.h"
+	<stdarg.h>
+	<dirent.h>
+
+1400828435 /prj/vos/httpSrv.h
+	"vos.h"
+	"sock.h"
+	"vss.h"
+
+1402308843 /mnt/c/prj/vos/vs0.c
+	<fcntl.h>
+	"vs0.h"
+	"vos.h"
+	<fcntl.h>
+
+1400828435 /mnt/c/prj/vos/vs0.h
+	"vtypes.h"
+	"vss.h"
+
+1400828470 /mnt/c/prj/vos/vtypes.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1400828435 /mnt/c/prj/vos/vss.h
+	"vtypes.h"
+
+1402319442 /mnt/c/prj/vos/vos.h
+	"vtypes.h"
+	<fcntl.h>
+	<netdb.h>
+	<sys/stat.h>
+	<sys/socket.h>
+	<windows.h>
+	<unistd.h>
+
+1402309279 /mnt/c/prj/vos/vss.c
+	"vss.h"
+	"vos.h"
+
+1402308989 /mnt/c/prj/vos/sock.c
+	"sock.h"
+	<stdarg.h>
+
+1400828435 /mnt/c/prj/vos/sock.h
+	"vos.h"
+	"vs0.h"
+	"vss.h"
+	"logger.h"
+	"vtypes.h"
+
+1400828435 /mnt/c/prj/vos/logger.h
+	"vs0.h"
+	<stdio.h>
+	<time.h>
+	"coders.h"
+
+1400828435 /mnt/c/prj/vos/coders.h
+	"vtypes.h"
+
+1400828435 /mnt/c/prj/vos/coders.c
+	"coders.h"
+	<stdarg.h>
+
+1402314956 /mnt/c/prj/vdb/vdb.c
+	"vdb-2.2.c"
+	"vdt-1.0.c"
+
+1402315475 /mnt/c/prj/vdb/vdb-2.2.c
+	"vdb.h"
+	<stdlib.h>
+	<stdio.h>
+	<stdarg.h>
+	"windows.h"
+	<dlfcn.h>
+	<link.h>
+
+1402320362 /mnt/c/prj/vdb/vdb.h
+	"vtypes.h"
+	<time.h>
+	"windows.h"
+	"u_pb.h"
+	"vds.h"
+
+1219378260 /mnt/c/prj/vdb/vdt-1.0.c
+	"vdb.h"
+	<time.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdlib.h>
+	<math.h>
+	<time.h>
+	<string.h>
+	<stdio.h>
+
+1402310288 /mnt/c/prj/vos/vos.c
+	"vos.h"
+	"pthread.h"
+	"stdlib.h"
+	"unistd.h"
+	<sys/time.h>
+	<stdio.h>
+	<sys/resource.h>
+
+1400828435 /mnt/c/prj/vos/logger.c
+	"logger.h"
+	<time.h>
+	<stdarg.h>
+	"vos.h"
+
+1400828435 /mnt/c/prj/vos/exe.c
+	"vtypes.h"
+	"coders.h"
+	"vos.h"
+
+1402309579 /mnt/c/prj/vos/httpSrv.c
+	"httpSrv.h"
+	<stdarg.h>
+	<dirent.h>
+
+1400828435 /mnt/c/prj/vos/httpSrv.h
+	"vos.h"
+	"sock.h"
+	"vss.h"
+
+1400828435 /mnt/c/prj/vos/httpTest.c
+	"httpSrv.h"
+	"logger.c"
+	"std_sock.c"
+	"exe.c"
+	"sock.c"
+	"httpSrv.c"
+	"vos.c"
+	"vs0.c"
+	"vss.c"
+	"coders.c"
+	<signal.h>
+
+1400828435 /mnt/c/prj/vos/std_sock.c
+	"vos.h"
+	"mutex-1.1.c"
+
+1402307539 source:/mnt/c/prj/smppTest/gearSMPP.c
+	"gearSMPP.h"
+	"smpp.h"
+	<stdio.h>
+
+1402319399 /mnt/c/prj/smppTest/gearSMPP.h
+	<vs0.h>
+	<vss.h>
+	<logger.h>
+	"vdb.h"
+	"sock.h"
+	"smpp.h"
+	"httpSrv.h"
+
+1402320983 /mnt/c/prj/smppTest/smpp.h
+	<vtypes.h>
+	"smpp.h"
+
+1402320498 source:/mnt/c/prj/smppTest/main.c
+	<stdio.h>
+	<stdlib.h>
+	<vtypes.h>
+	"httpSrv.h"
+	"gearSMPP.h"
+	"vsrv.h"
+	<stdarg.h>
+	"version.h"
+
+1227005280 /mnt/c/prj/smppTest/vsrv.h
+	"vos.h"
+
+1227870540 /mnt/c/prj/smppTest/version.h
+
+1226932260 source:/mnt/c/prj/smppTest/smpp.c
+	"smpp.h"
+	"coders.h"
+
+1227106500 source:/mnt/c/prj/smppTest/smppSrv.c
+	"smpp.h"
+	"gearSMPP.h"
+
+1402321006 source:/mnt/c/prj/smppTest/smppTest.c
+	<stdio.h>
+	"gearSMPP.h"
+	"vs0.c"
+	"vss.c"
+	"sock.c"
+	"coders.c"
+	"vdb.c"
+	"ini.c"
+	"vos.c"
+	"logger.c"
+	"exe.c"
+	"smpp.c"
+	"smppSrv.c"
+
+1226932260 /mnt/c/prj/smppTest/smpp.c
+	"smpp.h"
+	"coders.h"
+
+1227106500 /mnt/c/prj/smppTest/smppSrv.c
+	"smpp.h"
+	"gearSMPP.h"
+
+1225385400 source:/mnt/c/prj/smppTest/smsdb.c
+	"gearSMPP.h"
+	<vdb.h>
+
+1402320345 /mnt/c/prj/vdb/vdb2.c
+	"vdb.h"
+
+1223482320 /mnt/c/prj/vos/ini.c
+	"vss.h"
+	"vtypes.h"
+	"vs0.h"
+
+1400828435 /mnt/c/prj/vos/vos_linux_kbhit.c
+	"vos.h"
+	<termios.h>
+	<stropts.h>
+	<stdio.h>
+	<sys/ioctl.h>
+

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="gearSMPP" />
+		<Option makefile="makefile" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="gearSMPP" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wno-pointer-sign" />
+					<Add directory="../vos" />
+					<Add directory="../vdb" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="pthread" />
+					<Add library="dl" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="common.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gearSMPP.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="gearSMPP.h" />
+		<Unit filename="gearsmpp.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="smpp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="smpp.h" />
+		<Unit filename="smppSrv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="smppTest.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="smsdb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="version.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
