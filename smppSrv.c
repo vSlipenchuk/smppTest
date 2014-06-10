@@ -165,34 +165,59 @@ return 1; // OK
 }
 
 smppMsg *smppSocketSendText(smppSocket *sock,char *from,char *to,uchar *data, void *onMessage) {
-smppMsg *msg;
-    int len,dcs=0,dlen,rus=0;
+/*smppMsg *msg;
+    int len,dcs=0,rus=0;
 char buf[1024];
 if (!sock->out) sock->out = smppMsgArray(10); // New Array Here
 msg = smppMsgAdd(&sock->out,0); // Add new message to end...
 msg->onChangeState = onMessage;
 msg->num  = ++sock->num; // New Socket Number???
 if (!from || !from[0]) from=sock->src_addr;
-dcs=0,rus=0;
-for(len=0;data[len];len++) if (data[len]>128) rus++; // Count Rus Letters
-if (rus>0) dcs=8; // Unicode
+*/
+int dcs=0,pid=0 ; int rus=0; int len;
+char buf[1024];
+int esm = esmStoreAndForward;
+//for(len=0;data[len];len++) if (data[len]>128) rus++; // Count Rus Letters
+
+if (to[0]=='!') { // binary
+  to++;
+  len=hexstr2bin(buf,data,-1);
+  pid=0x7f; dcs=0xf6; // sim specific
+  esm|=esmUDHI;
+} else { // simple text
+rus=utf_nonstd(data,-1);
+if (rus) dcs=8; // Unicode
 if (dcs==0) {
     len = strlen(data);
     memcpy(buf,data,len);
    } else {
-    len = dlen = win2gsm(buf,data,strlen(data)); //unsigned char *d, unsigned char *s, int len) {
+    len = utf2gsm(buf,data,strlen(data)); //unsigned char *d, unsigned char *s, int len) {
     }
-printf("sending %d bytes dcs=%d\n",len,dcs);
+}
+printf("sending %d bytes with pid=%d dcs=%d\n",len,pid,dcs);
+return smppSocketSendBin(sock,from,to,esm, pid,dcs,buf,len,onMessage);
+}
+
+
+smppMsg *smppSocketSendBin(smppSocket *sock,char *from,char *to,int esm, int pid, int dcs, uchar *buf, int len, void *onMessage) {
+smppMsg *msg;
+if (!sock->out) sock->out = smppMsgArray(10); // New Array Here
+msg = smppMsgAdd(&sock->out,0); // Add new message to end...
+msg->onChangeState = onMessage;
+msg->num  = ++sock->num; // New Socket Number???
+if (!from || !from[0]) from=sock->src_addr;
+printf("BIN: sending %d bytes pid=%d, dcs=%d\n",len,pid, dcs);
 //sock->sendMode = 2; // OVER!!!
+hexdump("TP-UD",buf,len);
 switch(sock->sendMode) {
-case 1: len = smppPackSubmit(&msg->cmd,msg->num,sock->sysID,from,to,esmStoreAndForward,
-        1 /* request delivery_report */, dcs, buf,len); // Just Do IT
+case 1: len = smppPackSubmit(&msg->cmd,msg->num,sock->sysID,from,to,esm,
+        1 /* request delivery_report */, pid, dcs, buf,len); // Just Do IT
         break;
-case 2: len = smppPackDelivr(&msg->cmd,msg->num,sock->sysID,from,to,esmStoreAndForward,
-        1 /* request delivery_report */, dcs, buf,len); // Just Do IT
+case 2: len = smppPackDelivr(&msg->cmd,msg->num,sock->sysID,from,to,esm,
+        1 /* request delivery_report */, pid, dcs, buf,len); // Just Do IT
         break;
-default: len = smppPackDataSM(&msg->cmd,msg->num,sock->sysID,from,to,esmStoreAndForward,
-        1 /* request delivery_report */, dcs, buf,len); // Just Do IT
+default: len = smppPackDataSM(&msg->cmd,msg->num,sock->sysID,from,to,esm,
+        1 /* request delivery_report */, pid, dcs, buf,len); // Just Do IT
 }
 if (len<=0) {
     CLOG(sock,1,"-SendText: PackFailed!");
@@ -202,7 +227,6 @@ DLOG(sock,5,(void*)&msg->cmd,len,"SendMessage");
 SocketSendDataNow(&sock->sock,&msg->cmd,len); // Push IT
 return msg; // New Number returns
 }
-
 
 
 

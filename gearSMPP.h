@@ -81,8 +81,13 @@ int onSmppMessageStatus(smppMsg *msg, smppCommand *cmd, smppSocket *sock);  // D
 int onSmppConsoleMessageStatus(smppMsg *msg, smppCommand *cmd, smppSocket *sock) ; // PrintResult
 
 int gearSMPPmain(int npar,char **par); // Main Function, defined in gearSMPP
+
+smppMsg *smppSocketSendBin(smppSocket *sock,char *from,char *to,int esm, int pid, int dcs, uchar *buf, int len, void *onMessage);
 smppMsg *smppSocketSendText(smppSocket *sock,char *from,char *to,uchar *data, void *onMessage);
-int smppDB2SMS(smppSocket *sock) ; // Проверяет новые СМС по БД
+
+
+
+ int smppDB2SMS(smppSocket *sock) ; // Проверяет новые СМС по БД
 
 // Utils
 smppMsg* smppMsgFindByNum(smppMsg *msg,int num) ; // Find by a number in array...

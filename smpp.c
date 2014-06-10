@@ -166,7 +166,7 @@ return 1; // OK
 
 int smppPackSubmit(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,
   int esm_class,
-   int registered_delivery,int data_coding,char *data,int len) { // Payload Here
+   int registered_delivery,int pid, int data_coding,char *data,int len) { // Payload Here
 int  ok;
 cmd->len = 16; cmd->id = smpp_submit_sm; cmd->status=0; cmd->num = num;
 if (len<0) len = strlen(data);
@@ -174,7 +174,7 @@ ok = smppPackString(cmd,service_type,6) // Max 15 + NULL
   && smppPackAddr(cmd,src_addr)
   && smppPackAddr(cmd,dst_addr)
   && smppPackByte(cmd,esm_class) // 0=Store&Forward, 1=DATAGRAM, 2=Forward
-  && smppPackByte(cmd,0) // PID
+  && smppPackByte(cmd,pid) // PID
   && smppPackByte(cmd,0) // Priority
   && smppPackString(cmd,"",0) // ShedTime
   && smppPackString(cmd,"",0) // VP
@@ -191,7 +191,7 @@ return cmd->dlen;
 
 
 int smppPackDataSM(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,int esm_class,
-   int registered_delivery,int data_coding,char *data,int len) { // Payload Here
+   int registered_delivery,int pid, int data_coding,char *data,int len) { // Payload Here
 int  ok;
 cmd->len = 16; cmd->id = smpp_data_sm; cmd->status=0; cmd->num = num;
 if (len<0) len = strlen(data);
@@ -235,7 +235,7 @@ return cmd->dlen; // Yes!
 
 int smppPackDelivr(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,
   int esm_class,
-   int registered_delivery,int data_coding,char *data,int len) { // Payload Here
+   int registered_delivery,int pid, int data_coding,char *data,int len) { // Payload Here
 int  ok;
 //printf("PackDelivr... src_add='%s', srv_type='%s' dst_adr='%s' text='%s' len=%d\n",src_addr,service_type,dst_addr,data,len);
 cmd->len = 16; cmd->id = smpp_deliver_sm; cmd->status=0; cmd->num = num;
@@ -244,7 +244,7 @@ ok = smppPackString(cmd,service_type,6) // Max 15 + NULL
   && smppPackAddr(cmd,src_addr)
   && smppPackAddr(cmd,dst_addr)
   && smppPackByte(cmd,esm_class) // 0=Store&Forward, 1=DATAGRAM, 2=Forward
-  && smppPackByte(cmd,0) // PID
+  && smppPackByte(cmd,pid) // PID
   && smppPackByte(cmd,0) // Priority
 
   && smppPackString(cmd,"",0) // ShedTime
@@ -287,7 +287,8 @@ ok = smppPopString(cmd,&pos,&cmd->service_type)
 if (!ok) return 0; // Decode error???
 cmd->text = cmd->body+pos; cmd->text[cmd->sm_length]=0; // Zero Term anyway -)))
 if ((cmd->data_coding&0xF) == 8) { // Unicode !!!
-    gsm2win(cmd->text,cmd->text,cmd->sm_length); // Decode It
+    //gsm2win(cmd->text,cmd->text,cmd->sm_length); // Decode It
+    //gsm2utf(); // ZU?
     }
 //printf("HERE IN SMS (Delivr) from='%s' to '%s' dcs=%d text=%s\n",
   // cmd->src_addr,cmd->dst_addr, cmd->data_coding,cmd->text);
@@ -329,7 +330,7 @@ ok = smppPopString(cmd,&pos,&cmd->service_type)
 if (!ok) return 0; // Decode error???
 cmd->text = cmd->body+pos; cmd->text[cmd->sm_length]=0; // Zero Term anyway -)))
 if ((cmd->data_coding&0xF) == 8) { // Unicode !!!
-    gsm2win(cmd->text,cmd->text,cmd->sm_length); // Decode It
+    //gsm2win(cmd->text,cmd->text,cmd->sm_length); // Decode It
     }
 return 1; // ok
 }
@@ -358,7 +359,7 @@ if (!cmd->text) cmd->text=""; // Empty Message Payload???
 cmd->text[cmd->tlen]=0; // SetTextLength
 //cmd->text = cmd->body+pos; cmd->text[cmd->sm_length]=0; // Zero Term anyway -)))
 if ((cmd->data_coding&0xF) == 8) { // Unicode !!!
-    gsm2win(cmd->text,cmd->text,cmd->tlen); // Decode It
+    //gsm2win(cmd->text,cmd->text,cmd->tlen); // Decode It
     }
 //printf("HERE IN SMS (Delivr) from='%s' to '%s' dcs=%d text=%s\n",
   // cmd->src_addr,cmd->dst_addr, cmd->data_coding,cmd->text);

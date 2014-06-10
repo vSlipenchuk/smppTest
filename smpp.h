@@ -132,6 +132,8 @@ enum { //
     esmStoreAndForward = 0, // Default...
     esmDatagramm = 1,
     esmForward = 2,
+      // flags
+    esmUDHI =  0x40, // user data header indication
     };
 
 
@@ -271,13 +273,13 @@ Reserved
 int smppPacketReady(uchar *data,int len);
 int smppPackBind(smppCommand *cmd,int id, int num, char *system_id, char *password, char *system_type);
 int smppPackDataSM(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,int esm,
-      int registred_delivery,int data_coding,char *data,int len); // Payload Here
+      int registred_delivery,int pid, int data_coding,char *data,int len); // Payload Here
 
 int smppPackSubmit(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,int esm_class,
-   int registered_delivery,int data_coding,char *data,int len) ; // Payload Here
+   int registered_delivery,int pid, int data_coding,char *data,int len) ; // Payload Here
 int smppPackDelivr(smppCommand *cmd,int num,char *service_type,char *src_addr,char *dst_addr,
   int esm_class,
-   int registered_delivery,int data_coding,char *data,int len); // Payload Here
+   int registered_delivery,int pid, int data_coding,char *data,int len); // Payload Here
 
 
 

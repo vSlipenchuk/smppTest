@@ -34,7 +34,18 @@ char buf2[1024]; sprintf(buf2,"notify '%s'",buf); system(buf2); // call to notif
 char szDescription[1024]; // MyDefault Descritption...
 #include "version.h"
 
+int tst() {
+    char d[100]; char *p="abcdef.,-+";
+hexdump(p,p,strlen(p));
+int l = utf2gsm(d,p,-1);
+hexdump("out",d, l);
+return 0;
+}
+
 int main(int npar,char **par) {
+
+    //return tst();
+
     //printf("Hello world from SMPP!\n");
     sprintf(szDescription,"%s, ver: %d.%d.%d.%d, Build: %s", // sz Desc placed in exe.c...
               Description, Version, "GCC");
