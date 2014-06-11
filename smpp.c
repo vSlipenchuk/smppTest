@@ -18,7 +18,8 @@ if (cmd->len+l+1>=sizeof(cmd->body)) return 0; // overflow
 //printf("l=%d\n",l);
 if (l>0) memcpy(d,str,l); // Copy Data
 //printf("set?\n");
-memset(d+l,0,max-l); // Rest is zeros
+//memset(d+l,0,max-l); // Rest is zeros
+d[l]=0;
 //printf("Done!\n");
 cmd->len+=l+1; // Len+zero
 //printf("DonePackStr, len=%d\n",cmd->len);

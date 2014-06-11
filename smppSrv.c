@@ -1,5 +1,6 @@
 #include "smpp.h"
 #include "gearSMPP.h"
+#include "coders.h"
 
 void smppSocketDone(smppSocket *sock) {
 SocketDone(&sock->sock); // Clear Socket if any
@@ -185,16 +186,18 @@ if (to[0]=='!') { // binary
   pid=0x7f; dcs=0xf6; // sim specific
   esm|=esmUDHI;
 } else { // simple text
-rus=utf_nonstd(data,-1);
-if (rus) dcs=8; // Unicode
-if (dcs==0) {
-    len = strlen(data);
-    memcpy(buf,data,len);
-   } else {
+ if (*data=='!') { data++; dcs|=dcsFlash; }
+ rus=utf_nonstd(data,-1);
+ }
+if (rus) {
+    dcs|=8; // Unicode
     len = utf2gsm(buf,data,strlen(data)); //unsigned char *d, unsigned char *s, int len) {
     }
-}
-printf("sending %d bytes with pid=%d dcs=%d\n",len,pid,dcs);
+   else {
+    len = strlen(data);
+    memcpy(buf,data,len);
+   };
+printf("sending %d bytes with pid=0x%x dcs=0x%x\n",len,pid,dcs);
 return smppSocketSendBin(sock,from,to,esm, pid,dcs,buf,len,onMessage);
 }
 
@@ -251,7 +254,9 @@ return res;
 
 void  smppDoOnMessage( smppSocket *sock, int mode, smppCommand *cmd) { // When a new command here???
 int res = ESME_ROK;
-CLOG(sock,2,"IncomingMessage:{a:'%s',b:'%s',t:'%s'}",cmd->src_addr,cmd->dst_addr,cmd->text);
+CLOG(sock,2,"IncomingMessage:{a:'%s',b:'%s',pid:ox%x,dcs:0x%x,t:'%s'}",
+       cmd->src_addr,cmd->dst_addr,cmd->pid,cmd->data_coding,cmd->text);
+hexdump("UD",cmd->text,cmd->sm_length);
 //printf("Call On Message :%p, smppTest=%p\n",sock->onNewMessage,onTestSmppMessage);
 if (sock->onNewMessage) res = sock->onNewMessage(sock,cmd); // Делаем так
 if (res == SMPP_RES_ASYNC) return ;
@@ -364,7 +369,7 @@ int smppClientConnect(smppSocket *sm, uchar *host) { // Connect to host (sync)
 char buf[80],*u,*p,*sysID,*src_addr;
 time_t Started;
 smppCommand cmd; int len;
-//printf("1\n");
+printf("smppClientConnect: <%s>\n",host);
 Socket *sock =  &sm->sock; // Already here & "created"
 sock->checkPacket = onSMPPClientPacket;
 
@@ -380,7 +385,7 @@ if (!u) u="";
 if (!p) p="";
 //printf("2\n");
 snprintf(sm->name,sizeof(sm->name),"%s@%s",u,host); // UserHost
-CLOG(sm,3,"... tcp connecting host:%s",host);
+CLOG(sm,3,"... tcp connecting host:%s user:%s pass:%s",host,u,p);
 if (!socketConnectNow(sock,host,SMPP_PORT_DEF)) {
     CLOG(sm,1,"-FAIL contact host :%s",host);
     SocketDone(sock);
@@ -422,24 +427,65 @@ CLOG(sm,3,"smpp session authorized OK");
 return 1;
 }
 
+#include "im.c"
 
 /// -- smppConsole
 
-int smppConsole(smppSocket *sock,uchar *buf) { // Text command process on a socket
-if (*buf=='m') {
-    sscanf(buf+1,"%d",&sock->sendMode);
-    printf("+sendMode=%d now\n",sock->sendMode);
-    return 1;
-    }
 
+smppMsg *smppSocketSendIM(smppSocket *sock,char *to, uchar *cmd, int len, void *onMessage) {
+char buf[512];
+char tar[3]={0x01,0x1A,0x00};
+//int l = hexstr2bin(buf,"02 70 00 00 32 0D 00 00 00 00 01 1A 00 00 00 00 00 00 00",-1); // UDH+TAR HEADER
+int l = codeCommandPacket(buf,tar,len); // pack header
+memcpy(buf+l,cmd,len); // copy secure data
+return smppSocketSendBin(sock,"", to,esmForward | esmUDHI, 0x7f, 0xf6, buf, len + l, onMessage);
+}
+
+int smppConsole(smppSocket *sock,uchar *buf) { // Text command process on a socket
+uchar *phone;
+uchar out[500];
+int n;
 if (*buf=='d') {
     sscanf(buf+1,"%d",&sock->logLevel);
     printf("+logLevel=%d now\n",sock->logLevel);
     return 1;
     }
-if (memcmp(buf,"sms",3)==0) { // Do It
-        uchar *sms = buf+3;
-        uchar *phone=0;
+if (lcmp(&buf,"live")) {
+    int slot = 1, dur=10, ttl=10;
+    phone=get_word(&buf);
+    uchar *ch = strchr(phone,'#');
+    if (ch && ch[1]) { *ch=0; sscanf(ch+1,"%d#%d#%d",&slot,&dur,&ttl); }
+    printf("Pack slot:%d dur:%d ttl:%d text:'%s'\n",slot,dur,ttl,buf);
+    utf2koi(buf,buf,-1);
+    int len = im_code_livetext(out,slot,dur,ttl,buf);
+    n = (int)smppSocketSendIM(sock,phone,out,len,onSmppConsoleMessageStatus);
+    return 1;
+}
+if (lcmp(&buf,"mwi")) { // Do It
+     int dcs = 0;
+     phone = get_word(&buf);
+     if (*buf=='+') dcs=dcsIndOn;
+      else if (*buf=='-') dcs=dcsIndOff;
+        else { printf("mwi -/+vf@o\n"); return 0; } // error
+     while(*buf) {
+        if (*buf=='v') dcs|=indVms;
+        if (*buf=='f') dcs|=indFax;
+        if (*buf=='@') dcs|=indEmail;
+        if (*buf=='o') dcs|=indOther;
+        buf++;
+        }
+     n = (int)smppSocketSendBin(sock,"",phone,0,0,dcs,0,0,onSmppConsoleMessageStatus);
+     printf("ind sent %d\n",n);
+     return 1;
+}
+if (lcmp(&buf,"m")) {
+    sscanf(buf,"%d",&sock->sendMode);
+    printf("+sendMode=%d now\n",sock->sendMode);
+    return 1;
+    }
+if (lcmp(&buf,"sms")) { // Do It
+     phone = get_word(&buf);
+     uchar *sms = buf;
         while(*sms && *sms<=32) sms++;
         if (*sms) { // Phone Is Here Word...
             phone = sms;

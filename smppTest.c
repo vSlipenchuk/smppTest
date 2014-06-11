@@ -91,7 +91,8 @@ while(sock->state) { // While Iam connected make a loop
 
     //printf(">>> -----------SDONE\n");
     if (!kbhit()) continue;
-    gets(buf);
+    gets_buf2(buf,sizeof(buf));
+//    gets(buf);
     if (!buf[0] || strcmp(buf,"exit")==0) break; // Aborted ???
     //if (memcmp(buf,"db",3)==0) {        gearSMPPcheckDb(sm);        }
     smppConsole((void*)sock, buf);

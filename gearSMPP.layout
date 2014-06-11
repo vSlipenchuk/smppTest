@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="common.c" open="1" top="0" tabpos="2">
-		<Cursor position="70" topLine="0" />
+	<File name="common.c" open="1" top="0" tabpos="4">
+		<Cursor position="1035" topLine="44" />
 	</File>
-	<File name="gearSMPP.c" open="1" top="1" tabpos="1">
-		<Cursor position="12654" topLine="315" />
+	<File name="gearSMPP.c" open="1" top="0" tabpos="3">
+		<Cursor position="82" topLine="0" />
 	</File>
-	<File name="gearSMPP.h" open="1" top="0" tabpos="6">
-		<Cursor position="4256" topLine="76" />
+	<File name="gearSMPP.h" open="1" top="1" tabpos="11">
+		<Cursor position="4414" topLine="81" />
 	</File>
 	<File name="main.c" open="1" top="0" tabpos="8">
 		<Cursor position="911" topLine="40" />
 	</File>
-	<File name="smpp.c" open="1" top="0" tabpos="3">
-		<Cursor position="5430" topLine="160" />
+	<File name="smpp.c" open="1" top="0" tabpos="5">
+		<Cursor position="10076" topLine="279" />
 	</File>
-	<File name="smpp.h" open="1" top="0" tabpos="5">
-		<Cursor position="10229" topLine="270" />
+	<File name="smpp.h" open="1" top="0" tabpos="6">
+		<Cursor position="3933" topLine="133" />
 	</File>
-	<File name="smppSrv.c" open="1" top="0" tabpos="4">
-		<Cursor position="8202" topLine="447" />
+	<File name="smppSrv.c" open="1" top="0" tabpos="2">
+		<Cursor position="17910" topLine="476" />
 	</File>
-	<File name="smppTest.c" open="0" top="0" tabpos="5">
-		<Cursor position="5695" topLine="138" />
+	<File name="smppTest.c" open="1" top="0" tabpos="10">
+		<Cursor position="3528" topLine="88" />
 	</File>
 	<File name="smsdb.c" open="1" top="0" tabpos="9">
-		<Cursor position="587" topLine="73" />
+		<Cursor position="587" topLine="68" />
 	</File>
 	<File name="version.h" open="1" top="0" tabpos="7">
 		<Cursor position="0" topLine="0" />

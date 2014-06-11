@@ -22,6 +22,8 @@
 					<Add option="-s" />
 					<Add library="pthread" />
 					<Add library="dl" />
+					<Add library="termcap" />
+					<Add library="readline" />
 				</Linker>
 			</Target>
 		</Build>

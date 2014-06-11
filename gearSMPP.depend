@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1402320624 source:/mnt/c/prj/smppTest/common.c
+1402476000 source:/mnt/c/prj/smppTest/common.c
 	"vs0.c"
 	"vss.c"
 	"sock.c"
@@ -14,6 +14,10 @@
 	"std_sock.c"
 	"ini.c"
 	"vos_linux_kbhit.c"
+	"strutil.c"
+	"curses.h"
+	<readline/readline.h>
+	<readline/history.h>
 
 1402308843 /prj/vos/vs0.c
 	<fcntl.h>
@@ -150,10 +154,10 @@
 	<time.h>
 	"coders.h"
 
-1402403200 /mnt/c/prj/vos/coders.h
+1402425460 /mnt/c/prj/vos/coders.h
 	"vtypes.h"
 
-1402403179 /mnt/c/prj/vos/coders.c
+1402426165 /mnt/c/prj/vos/coders.c
 	"coders.h"
 	<stdarg.h>
 
@@ -250,7 +254,7 @@
 	"smpp.h"
 	"httpSrv.h"
 
-1402408685 /mnt/c/prj/smppTest/smpp.h
+1402483136 /mnt/c/prj/smppTest/smpp.h
 	<vtypes.h>
 	"smpp.h"
 
@@ -269,15 +273,17 @@
 
 1227870540 /mnt/c/prj/smppTest/version.h
 
-1402407803 source:/mnt/c/prj/smppTest/smpp.c
+1402475882 source:/mnt/c/prj/smppTest/smpp.c
 	"smpp.h"
 	"coders.h"
 
-1402409321 source:/mnt/c/prj/smppTest/smppSrv.c
+1402483428 source:/mnt/c/prj/smppTest/smppSrv.c
 	"smpp.h"
 	"gearSMPP.h"
+	"coders.h"
+	"im.c"
 
-1402331319 source:/mnt/c/prj/smppTest/smppTest.c
+1402476047 source:/mnt/c/prj/smppTest/smppTest.c
 	<stdio.h>
 	"gearSMPP.h"
 	"vs0.c"
@@ -292,13 +298,15 @@
 	"smpp.c"
 	"smppSrv.c"
 
-1402407803 /mnt/c/prj/smppTest/smpp.c
+1402475882 /mnt/c/prj/smppTest/smpp.c
 	"smpp.h"
 	"coders.h"
 
-1402409321 /mnt/c/prj/smppTest/smppSrv.c
+1402483428 /mnt/c/prj/smppTest/smppSrv.c
 	"smpp.h"
 	"gearSMPP.h"
+	"coders.h"
+	"im.c"
 
 1225385400 source:/mnt/c/prj/smppTest/smsdb.c
 	"gearSMPP.h"
@@ -318,4 +326,10 @@
 	<stropts.h>
 	<stdio.h>
 	<sys/ioctl.h>
+
+1402479874 /mnt/c/prj/smppTest/im.c
+
+1402416523 /mnt/c/prj/smppTest/strutil.c
+	"coders.h"
+	<stdarg.h>
 

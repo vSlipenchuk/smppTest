@@ -136,6 +136,13 @@ enum { //
     esmUDHI =  0x40, // user data header indication
     };
 
+enum {
+    // flags
+     dcsIndOff =0xC0, // MWI
+     dcsIndOn  =0xC8, //indVms=0, indFax=1, indEmail=2, indOther=3, // indicators
+
+     dcsFlash = 0xF0
+     };
 
 enum { // smpp command id
     SMPPCMD(smpp_bind_receiver,0x00000001),
