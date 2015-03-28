@@ -1,34 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="common.c" open="1" top="0" tabpos="4">
-		<Cursor position="1035" topLine="44" />
+	<File name="common.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1319" topLine="46" />
+		</Cursor>
 	</File>
-	<File name="gearSMPP.c" open="1" top="0" tabpos="3">
-		<Cursor position="82" topLine="0" />
+	<File name="gearSMPP.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="127" topLine="9" />
+		</Cursor>
 	</File>
-	<File name="gearSMPP.h" open="1" top="1" tabpos="11">
-		<Cursor position="4414" topLine="81" />
+	<File name="gearSMPP.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12127" topLine="325" />
+		</Cursor>
 	</File>
-	<File name="main.c" open="1" top="0" tabpos="8">
-		<Cursor position="911" topLine="40" />
+	<File name="main.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
 	</File>
-	<File name="smpp.c" open="1" top="0" tabpos="5">
-		<Cursor position="10076" topLine="279" />
+	<File name="smpp.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1768" topLine="45" />
+		</Cursor>
 	</File>
-	<File name="smpp.h" open="1" top="0" tabpos="6">
-		<Cursor position="3933" topLine="133" />
+	<File name="smpp.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="502" topLine="15" />
+		</Cursor>
 	</File>
-	<File name="smppSrv.c" open="1" top="0" tabpos="2">
-		<Cursor position="17910" topLine="476" />
+	<File name="smppTest.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2204" topLine="68" />
+		</Cursor>
 	</File>
-	<File name="smppTest.c" open="1" top="0" tabpos="10">
-		<Cursor position="3528" topLine="88" />
+	<File name="version.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
 	</File>
-	<File name="smsdb.c" open="1" top="0" tabpos="9">
-		<Cursor position="587" topLine="68" />
+	<File name="smsdb.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
 	</File>
-	<File name="version.h" open="1" top="0" tabpos="7">
-		<Cursor position="0" topLine="0" />
+	<File name="smppSrv.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="15874" topLine="404" />
+		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

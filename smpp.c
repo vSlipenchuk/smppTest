@@ -44,6 +44,8 @@ int smppPackWord(smppCommand *cmd,unsigned short val) { val=HTONS(val); return s
 
 int smppPackBind(smppCommand *cmd,int id, int num, char *system_id, char *password, char *system_type) {
 int ok;
+  if (!num) num=1; // default
+fprintf(stderr,"BindWithSEQ:%d\n",num);
 cmd->len = 16; cmd->id = id; cmd->status=0; cmd->num = num;
 ok = smppPackString(cmd,system_id,16) // Max 15 + NULL
   && smppPackString(cmd,password,9)

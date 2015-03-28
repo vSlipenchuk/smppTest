@@ -30,6 +30,13 @@
 
 #endif
 
+
+unsigned long os_ticks() { return GetTickCount();}
+
+void *gets_buf2(char *buf,int size) {
+gets(buf);
+}
+
 Counter TestReadCounter = {1000000}; // PPS
 
 int onSmppConsoleMessageStatus(smppMsg *msg, smppCommand *cmd, smppSocket *sock) { // When status changes

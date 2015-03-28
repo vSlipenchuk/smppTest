@@ -326,6 +326,9 @@ return 0; // Done...
 }
 
 int gearSMPPmain(int npar,char **par) { // First - init global SMPP server...
+
+return smppTestMain(npar,par) ; // ZUZUKA
+
     Main = gearSMPPNew(); // Create a new service -)))
     uchar *INI;
     if (npar>2 && strcmp(par[1],"-c")==0) { // Spec - a client ???

@@ -21,7 +21,7 @@
 
 #include "strutil.c"
 
-
+#ifdef LINUX
 #include "curses.h"
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -67,3 +67,4 @@ free(g);
 return 1; // OK
 }
 
+#endif // LINUX

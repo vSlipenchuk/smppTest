@@ -16,7 +16,8 @@
 
 
 #define SMPPCMD(A,CODE) A = HTONL(CODE)
-#define SMPP_VERSION 0x34
+//#define SMPP_VERSION 0x34
+#define SMPP_VERSION 0x50
 #include <vtypes.h>
 
 #define SMPP_PORT_DEF 2775 /* Default SMPP Port ??? */

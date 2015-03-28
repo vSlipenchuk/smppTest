@@ -12,6 +12,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="smpp://GTsmppTest/UkjNtk1@10.77.1.10 -logLevel=10" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wno-pointer-sign" />
@@ -20,11 +21,20 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add library="pthread" />
-					<Add library="dl" />
-					<Add library="termcap" />
-					<Add library="readline" />
+					<Add option="-static-libgcc" />
+					<Add library="wsock32" />
+					<Add library="psapi" />
 				</Linker>
+			</Target>
+			<Target title="Win">
+				<Option output="gearSMPP" prefix_auto="1" extension_auto="1" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Compiler>
+					<Add directory="../vos" />
+					<Add directory="../vdb" />
+				</Compiler>
 			</Target>
 		</Build>
 		<Compiler>
@@ -32,31 +42,41 @@
 		</Compiler>
 		<Unit filename="common.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="gearSMPP.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="gearSMPP.h" />
-		<Unit filename="gearsmpp.rc">
-			<Option compilerVar="WINDRES" />
+		<Unit filename="gearSMPP.h">
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="smpp.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="smpp.h" />
+		<Unit filename="smpp.h">
+			<Option target="Release" />
+		</Unit>
 		<Unit filename="smppSrv.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="smppTest.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
 		<Unit filename="smsdb.c">
 			<Option compilerVar="CC" />
+			<Option target="Release" />
 		</Unit>
-		<Unit filename="version.h" />
+		<Unit filename="version.h">
+			<Option target="Release" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

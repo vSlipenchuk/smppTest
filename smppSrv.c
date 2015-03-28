@@ -396,7 +396,7 @@ strNcpy(sm->pass,p);
 strNcpy(sm->sysID,sysID); // My System ID - copy ???
 strNcpy(sm->src_addr,src_addr);
 CLOG(sm,3,"... host contacted, bind transeiver {user:'%s',pass:'%s',src_addr:'%s',sysId:'%s'}",u,p,sm->src_addr,sm->sysID);
-len = smppPackBind(&cmd,smpp_bind_transceiver,0,u,p,sysID);
+len = smppPackBind(&cmd,smpp_bind_transceiver,htons(1),u,p,sysID);
 if (len<0) {
     CLOG(sm,1,"-FAIL pack bind",host);
     return 0;
