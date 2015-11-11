@@ -486,15 +486,7 @@ if (lcmp(&buf,"m")) {
 if (lcmp(&buf,"sms")) { // Do It
      phone = get_word(&buf);
      uchar *sms = buf;
-        while(*sms && *sms<=32) sms++;
-        if (*sms) { // Phone Is Here Word...
-            phone = sms;
-            while(*sms && *sms>32) sms++;
-            if (*sms) {*sms=0; sms++;} // Rest is a text
-            while(*sms && *sms<=32) sms++; // ltrim
-            }
-        //if (!phone || !*phone) phone=sock->addr_to;
-        if (!*phone) {
+     if (!*phone) {
             printf("-syntax> 'sms <phone> [text]'\n");
             return 0;
             }
@@ -509,6 +501,38 @@ if (lcmp(&buf,"sms")) { // Do It
             } else {
             CLOG(sock,0,"+OK, new message:%d",n);
             }
+        return 1;
         }
-return 1;
+if (lcmp(&buf,"bin")) { // Do It
+     phone = get_word(&buf);
+     uchar *sms = buf;
+     //printf("R=%s\n",sms);
+        while(*sms && *sms<=32) sms++;
+        if (!*phone) {
+            printf("-syntax> 'bin <phone> [hex_string]'\n");
+            return 0;
+            }
+        //dos2win(sms,sms,-1);
+        int n  = 0;
+        //printf("H:<%s> len=%d\n",sms,strlen(sms));
+        int len = hexstr2bin(sms,sms,strlen(sms)); // gets binary
+        // printf("R:len=%d\n",sms,len);
+
+        n = (int)smppSocketSendBin(sock,"",phone,
+                                    esmUDHI,0x7F,0xF6, // esm,pid,dcs,
+                                    sms,len,
+                                    onSmppConsoleMessageStatus);
+        //n = (int)smppSocketSendText(sock,"",phone,sms,onSmppConsoleMessageStatus);
+        //printf("SEND TO '%s' TEXT '%s'\n",phone,sms);
+        //exit(1);
+        //if (!n) n = smsdb_newOut(sock,sock->sysID,phone,sms); // reg it!!! ZU - num_a must be here!!!
+        if (!n) {
+            CLOG(sock,0,"-FAIL register message");
+            } else {
+            CLOG(sock,0,"+OK, new message:%d binlen:%d",n,len);
+            }
+        return 1;
+        }
+//printf("cmd unknown")
+return -1;
 }

@@ -15,6 +15,7 @@
 #include "vs0.c"
 #include "vss.c"
 #include "sock.c"
+#include "std_sock.c"
 #include "coders.c"
 #include "vdb.c" // for scanUINT!!!
 #include "ini.c"
@@ -27,11 +28,14 @@
 #include "smpp.c"
 #include "smppSrv.c"
 //#include "../util/httpTest.c"
+#include "strutil.c"
+#include "vos_linux_kbhit.c"
 
 #endif
 
-
+#ifdef WIN32
 unsigned long os_ticks() { return GetTickCount();}
+#endif
 
 void *gets_buf2(char *buf,int size) {
 gets(buf);
@@ -56,7 +60,7 @@ return 1; // OK
 
 int CounterPPS(Counter *c) { return (c->pValue+c->ppValue)/2; }
 
-int smppConsoleClient(char *host, void *onNewMessage) { // Create a client connection & run it???
+int smppConsoleClient2(char *host, void *onNewMessage,char **cmd, int len) { // Create a client connection & run it???
 char szHost[100];
 smppSocket *sm = smppSocketNew();
 Socket *sock =  &sm->sock; // Already here & "created"
@@ -81,6 +85,7 @@ if (sock->connectStatus!=connectApp) {
 printf("DoneConnect...\n");
 printf("+smppClient connected '%s'. Type a command for:\n"
        " send message: 'sms <phone> text'\n"
+       " send binary : 'bin <phone> hexstring\n"
        " set send_sm command (submit|delivr|data_sm): 'm<1|2|3>'"
        " exit program: 'exit'\n",host);
 sock->readPacket = &TestReadCounter;
@@ -97,8 +102,14 @@ while(sock->state) { // While Iam connected make a loop
     RunSleep( SocketRun(sock));
 
     //printf(">>> -----------SDONE\n");
-    if (!kbhit()) continue;
-    gets_buf2(buf,sizeof(buf));
+
+    if (len>0) {
+       strNcpy(buf,cmd[0]); cmd++;
+       len--;
+       } else  {
+        if (!kbhit()) continue;
+        gets_buf2(buf,sizeof(buf));
+       }
 //    gets(buf);
     if (!buf[0] || strcmp(buf,"exit")==0) break; // Aborted ???
     //if (memcmp(buf,"db",3)==0) {        gearSMPPcheckDb(sm);        }
@@ -110,9 +121,13 @@ return 0;
 }
 
 
+int smppConsoleClient(char *host,void *onNewMessage) {
+return smppConsoleClient2(host,onNewMessage,0,0);
+}
+
 void smppTestHelp() {
 printf("Usage:\n"
-       " [smppClient]:  smppTest.exe <[smppp://][user[#sysId]/pass@]host[:port]>\n"
+       " [smppClient]:  smppTest.exe <[smppp://][user[#sysId]/pass@]host[:port]> [commands]\n"
        " [smppSevrver]: smppTest.exe -p[port] -r[replayMode:1] -C[runClient:0]\n"
        );
 }
@@ -234,6 +249,7 @@ for(i=2;i<npar;i++) {
     if (*cmd=='r') sscanf(cmd+1,"%d",&testReplayMode); // MyReplayMode???
     }
 printf("CreateConsole, host:'%s',replayMode:%d\n",host,testReplayMode);
-smppConsoleClient(host,onTestSmppMessage); // Run as console
+smppConsoleClient2(host,onTestSmppMessage,par+2,npar-2); // Run as console
 return 0; // OK
 }
+
