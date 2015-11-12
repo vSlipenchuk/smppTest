@@ -8,6 +8,7 @@
 (((uint32)(A) & 0x00ff0000) >> 8) | \
 (((uint32)(A) & 0x0000ff00) << 8) | \
 (((uint32)(A) & 0x000000ff) << 24))
+
 #define HTONS(A) ((((uint16)(A) & 0xff00) >> 8) | \
                     (((uint16)(A) & 0x00ff) << 8))
 
@@ -186,6 +187,7 @@ typedef struct {
     int len,id,status,num; // Length,ID,ErrorStatus,SequenceNumber
     uchar body[1024]; // Then body follows, page 37 pack types -)))
     uchar src_addr[80],dst_addr[80]; // Copy Of Addresses
+    uchar msgid[18]; // smsc id after decode
     uchar *data; int dlen; // Data & datalen of a message
     uchar *text,*vp,*shed_time,*service_type; // Ref to text
     int tlen; // Same as sm_length or more -???
@@ -319,7 +321,7 @@ smppSrv *smppSrvCreate(int port, void *onSmppBind, void *onSmppPacket,void *onSm
 int smppPopString(smppCommand *cmd, int *pos, uchar **u) ; // Extracts a string
 int smppPopAddr(smppCommand *cmd,int *pos,char *addr) ;// Gets addr to a buffer?
 int smppPopByte(smppCommand *cmd,int *pos,unsigned char *val);
-void smppHead(int *buf,int cmd,int status,int ref);
+void smppHead(unsigned int *buf,unsigned int cmd,int status,int ref);
 int smppPackDataOK(smppCommand *cmd, int id, int num, char *message_id);
 
 int smppDecodeDelivr(smppCommand *cmd);

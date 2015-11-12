@@ -37,6 +37,9 @@
 unsigned long os_ticks() { return GetTickCount();}
 #endif
 
+int testReplayMode = 1; // 1 - just accept & print, 0 - do Nothing, 2 -replay with message, -1 decline???
+
+
 void *gets_buf2(char *buf,int size) {
 gets(buf);
 }
@@ -95,7 +98,7 @@ sock->readPacket = &TestReadCounter;
 objAddRef(sock); // ! When disconnected - socket will be destroyed!!!
 
 while(sock->state) { // While Iam connected make a loop
-    char buf[80];
+    char buf[280];
     TimeUpdate();
     //printf(">>> ---------- SRUN\n");
     if (NeedReport()) Reportf("PacketPerSecond = %d Time:%s, pVal=%d",CounterPPS(&TestReadCounter),szTimeNow,TestReadCounter.pValue);
@@ -138,7 +141,6 @@ CLOG(sock,2,"bindRequest: mode:%d,user:'%s',pass:'%s',sysId:'%s'\n",mode,u,p,sys
 return ESME_ROK; // OK?
 }
 
-int testReplayMode = 1; // 1 - just accept & print, 0 - do Nothing, 2 -replay with message, -1 decline???
 
 int onSmppConsoleNewMessage(smppSocket *smpp,smppCommand *cmd) { // We have a command???
 printf(" (ESME_ROK) console message accepted {a:'%s',b:'%s',t:'%s'}\n",cmd->src_addr,cmd->dst_addr,cmd->text);
@@ -148,8 +150,8 @@ return ESME_ROK;
 
 int onTestSmppMessage(smppSocket *smpp,smppCommand *cmd) { // We have a command???
 smppMsg *msg;
-printf(" (ESME_ROK) server message accepted {a:'%s',b:'%s',t:'%s'} replay:%d\n",cmd->src_addr,cmd->dst_addr,cmd->text,
- testReplayMode);
+printf(" (ESME_ROK) server message accepted {a:'%s',b:'%s',t:'%s'} replay:%d msgid:'%s'\n",cmd->src_addr,cmd->dst_addr,cmd->text,
+ testReplayMode,cmd->msgid);
 switch(testReplayMode) {
     case -1: return ESME_RSYSERR; // SystemError
     case 0:  return SMPP_RES_ASYNC; // Do Nothing - async

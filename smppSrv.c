@@ -166,6 +166,10 @@ arrDelN((void**)&sock->out,idx,1); // Remove???
 //printf("Index removed, newlen=%d\n",arrLength(sock->in));
 return 1; // OK
 }
+ 
+int smppNewNum(smppSocket *sock) {
+	 return htonl( ++ sock->num );
+}
 
 smppMsg *smppSocketSendText(smppSocket *sock,char *from,char *to,uchar *data, void *onMessage) {
 /*smppMsg *msg;
@@ -209,7 +213,7 @@ smppMsg *msg;
 if (!sock->out) sock->out = smppMsgArray(10); // New Array Here
 msg = smppMsgAdd(&sock->out,0); // Add new message to end...
 msg->onChangeState = onMessage;
-msg->num  = ++sock->num; // New Socket Number???
+msg->num  =  smppNewNum( sock ); // New Socket Number???
 if (!from || !from[0]) from=sock->src_addr;
 printf("BIN: sending %d bytes pid=%d, dcs=%d\n",len,pid, dcs);
 //sock->sendMode = 2; // OVER!!!
@@ -263,11 +267,14 @@ hexdump("UD",cmd->text,cmd->sm_length);
 if (sock->onNewMessage) res = sock->onNewMessage(sock,cmd); // Делаем так
 if (res == SMPP_RES_ASYNC) return ;
 switch(mode) {
-    case 1:    smppPack_SUBMIT_SM_RESP(cmd, res, 0); break; //smppCommand *cmd, int status, char *msg);
-    case 2:    smppPack_DELIVER_SM_RESP(cmd, res, 0); break; //smppCommand *cmd, int status, char *msg);
-    default:   smppPack_DATA_SM_RESP(cmd, res, 0); break; //smppCommand *cmd, int status, char *msg);
+    case 1:    smppPack_SUBMIT_SM_RESP(cmd, res, cmd->msgid); break; //smppCommand *cmd, int status, char *msg);
+    case 2:    smppPack_DELIVER_SM_RESP(cmd, res, cmd->msgid); break; //smppCommand *cmd, int status, char *msg);
+    default:   smppPack_DATA_SM_RESP(cmd, res, cmd->msgid); break; //smppCommand *cmd, int status, char *msg);
     }
-SocketSendDataNow(&sock->sock,cmd->body,cmd->dlen); // Push IT - to send...
+printf("SendBak %d bytes\n",cmd->dlen);
+SocketSend(&sock->sock,(void*)cmd,cmd->dlen); // Push IT - to send...
+   // SocketSendDataNow(&sock->sock,0,0);
+//SocketSendDataNow(&sock->sock,cmd->body,cmd->dlen); // Push IT - to send...
 //printf("Done, replied...\n");
 }
 
@@ -281,6 +288,7 @@ memset(&CMD,0,sizeof(CMD)); // Clear CMD
 memcpy(&CMD,data,len); // Len has other???
 cmd = &CMD;
 cmd->dlen  = len;  // Decode My Length ???
+cmd->msgid[0]=0;
 DLOG(sock,6,data,len,"onSMPP_Packet_ready"); // PrintIt (in a file???)
 int 	ref=htonl(cmd->num);
 switch(cmd->id) {
@@ -363,7 +371,7 @@ case smpp_data_sm_resp: // response on a data sm???
        }
    break;
 case smpp_generic_nack:
-   CLOG(sock,2,"-!! Nack here, ignore,num:%d, status=%x",cmd->num,cmd->id);
+   CLOG(sock,2,"-!! Nack here, ignore,num:%d (ref:%d), status=%x",  cmd->num,ref,cmd->id);
    break;
 default:
    DLOG(sock,2,&cmd,cmd->dlen,"-smpp UNKNOWN CMD_ID=%x",cmd->id); // send generic nack???

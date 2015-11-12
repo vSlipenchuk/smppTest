@@ -104,26 +104,34 @@ while(len>0) {
 void prnstr(void *handle,uchar *buf,int len) { printf("%*.*s",len,len,buf);}
 void hexdump(uchar *msg,void *data,int len) { hexdumpcb(msg,data,len, prnstr,0); }
 
-void smppHead(int *buf,int cmd,int status,int ref) {
+void smppHead(unsigned int *buf,unsigned int cmd,int status,int ref) {
 buf[0]=HTONL(16); // len
 buf[1]=cmd;
 buf[2]=status;
 buf[3]=ref;
 }
 
-int smppPackResp(smppCommand *cmd, int cmd_id, int cmd_status, int seq_number, char *msg_id) {
+int smppPackResp(smppCommand *cmd, unsigned int cmd_id, int cmd_status, int seq_number, char *msg_id) {
 int *L;
-smppHead((void*)cmd->body,cmd_id, HTONL(cmd_status), seq_number); cmd->len = 16; // Just a header
+smppHead((void*)cmd,cmd_id, HTONL(cmd_status), seq_number); 
+cmd->len = 16; // Just a header
+if (!msg_id) msg_id=""; // reuqired empty
 if (msg_id) { // Add C- Strin here ...
     smppPackString(cmd,msg_id,255); // JustIt
     }
 cmd->dlen = cmd->len;
-L = (void*) cmd->body;
-*L = HTONL(cmd->dlen); // Convert a length
+//L = (void*) cmd->body; *L = HTONL(cmd->dlen); // Convert a length - with LENGTH-filed itself
+    cmd->len = HTONL(cmd->len);
+    //printf("Packed %d bytes for cmd=%x\n",cmd->dlen,cmd_id);
+    //hexdump("Pack", (void*) &cmd->len, cmd->dlen);
 return cmd->dlen; // Total Convertred Lenth
 }
 
 int smppPack_DELIVER_SM_RESP(smppCommand *cmd, int status, char *msg) {
+	//msg="012345678";
+	//int code1 = HTONL(0x80000005); int code2=htonl(0x80000005);
+	//printf("Packing  delvr_resp %s resp:%x code1:%x code2:%x code3:%x\n",
+	   // msg,smpp_deliver_sm_resp,code1,code2,0x80000005);
 return smppPackResp(cmd,smpp_deliver_sm_resp, status, cmd->num, msg); // Pack It
 }
 
@@ -132,6 +140,7 @@ return smppPackResp(cmd,smpp_submit_sm_resp, status, cmd->num, msg); // Pack It
 }
 
 int smppPack_DATA_SM_RESP(smppCommand *cmd, int status, char *msg) {
+	
 return smppPackResp(cmd,smpp_data_sm_resp, status, cmd->num, msg); // Pack It
 }
 
@@ -286,9 +295,11 @@ ok = smppPopString(cmd,&pos,&cmd->service_type)
      && smppPopByte(cmd,&pos,&cmd->replace_if_present)
      && smppPopByte(cmd,&pos,&cmd->data_coding)
      && smppPopByte(cmd,&pos,&cmd->sm_default_msg_id)
-     && smppPopByte(cmd,&pos,&cmd->sm_length);
+     && smppPopByte(cmd,&pos,&cmd->sm_length)
+     && smppUnpackTLV(cmd,pos+cmd->sm_length);
 if (!ok) return 0; // Decode error???
 cmd->text = cmd->body+pos; cmd->text[cmd->sm_length]=0; // Zero Term anyway -)))
+	
 if ((cmd->data_coding&0xF) == 8) { // Unicode !!!
     //gsm2win(cmd->text,cmd->text,cmd->sm_length); // Decode It
     //gsm2utf(); // ZU?
@@ -307,6 +318,11 @@ while(LEN> 4+4) { // Have Smth
  //printf("TLV - ID=%d LEN=%d RLEN=%d",id,len,LEN); // Here
  switch(id) {
  case smpp_message_payload: cmd->text=data; cmd->tlen = len; break;// SetTextHere
+ //case smpp_message_state: //   0x0427 - len 1
+ case 0x001e: // smpp_message_id: cmd->msgid = 
+	  if (len>=sizeof(cmd->msgid)) len=sizeof(cmd->msgid)-1;
+	  memcpy(cmd->msgid,data,len-1); cmd->msgid[len]=0;
+          break; 
  }
  if (len>LEN || len<0) break; // ERROR!!!
  data+=len; LEN-=len; // again???
