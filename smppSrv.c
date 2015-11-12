@@ -34,6 +34,8 @@ sock->state = sockSend;
 }
 
 void smppSendNak(Socket *sock,int ref) { smppSendResp(sock,smpp_generic_nack,0,ref);}// Generic Nack send
+void smppSendLinkOk(Socket *sock,int ref) { smppSendResp(sock,smpp_enquire_link_resp,0,ref);}// SendLinkOk
+
 
 /*
 int smppOnMessage(Socket *sock,smppCommand *cmd,smppSrv *srv) { // OK - do a message !!!
@@ -269,6 +271,7 @@ SocketSendDataNow(&sock->sock,cmd->body,cmd->dlen); // Push IT - to send...
 //printf("Done, replied...\n");
 }
 
+
 int onSMPPClientPacket(uchar *data,int len,smppSocket *sock) {
 smppCommand *cmd = (void*)data,CMD;
 smppMsg *msg;
@@ -279,7 +282,12 @@ memcpy(&CMD,data,len); // Len has other???
 cmd = &CMD;
 cmd->dlen  = len;  // Decode My Length ???
 DLOG(sock,6,data,len,"onSMPP_Packet_ready"); // PrintIt (in a file???)
+int 	ref=htonl(cmd->num);
 switch(cmd->id) {
+case smpp_enquire_link:      
+	                  DLOG(sock,1,data,len,"enquire_link send ok ref=%d",ref); // PrintIt (in a file???)
+                          smppSendLinkOk(sock,cmd->num); 
+	              return len; // send ok answer
 case smpp_bind_transceiver:   smppDoBind(sock,3,cmd);  break; // Inout
 case smpp_bind_receiver:      smppDoBind(sock,1,cmd);  break; // in only (deliver or submit - depends on server-client???)
 case smpp_bind_transmitter:   smppDoBind(sock,2,cmd);  break; // out only
